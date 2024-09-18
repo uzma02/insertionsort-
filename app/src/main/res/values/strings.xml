@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">InsertionSort</string>
+    <string name="insertion_sort_activity_name">Insertion Sort Activity</string>
+
+</resources>
