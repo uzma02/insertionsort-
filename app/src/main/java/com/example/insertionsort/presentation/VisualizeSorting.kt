@@ -54,22 +54,20 @@ fun VisualizeSorting(sortFlow: Flow<SortInfo>) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(14.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             sortState.list.forEachIndexed { index, number ->
+                val boxColor = when (index) {
+                    sortState.j -> Color.Red
+                    sortState.j1 -> Color(0xFF1F51FF)
+                    else -> Color.Gray
+                }
                 Box(
                     modifier = Modifier
                         .size(50.dp)
                         .padding(4.dp)
-                        .background(
-                            color = when (index) {
-                                sortState.j -> Color.Red
-                                sortState.j1 -> Color.Blue
-                                else -> Color.Gray
-                            },
-                            shape = RoundedCornerShape(8.dp)
-                        ),
+                        .background(boxColor, shape = RoundedCornerShape(8.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -81,7 +79,7 @@ fun VisualizeSorting(sortFlow: Flow<SortInfo>) {
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         if (sortState.key != -1) {
             Row(
@@ -91,26 +89,26 @@ fun VisualizeSorting(sortFlow: Flow<SortInfo>) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 if (sortState.j >= 0) {
-                    ArrowPointer("j", sortState.j, sortState.list)
+                    ArrowPointer("j", sortState.j, sortState.list, Color.Red)
                 }
                 if (sortState.j1 < sortState.list.size) {
-                    ArrowPointer("j+1", sortState.j1, sortState.list)
+                    ArrowPointer("j+1", sortState.j1, sortState.list, Color(0xFF1F51FF))
                 }
                 KeyPointer("key", sortState.index, sortState.key)
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
         Text(
-            text = "Pseudocode",
+            text = "Code",
             color = Color.Magenta,
             fontSize = 20.sp
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         PseudoCode(currentLine = sortState.currentLine)
-
-
     }
 }
 
@@ -133,11 +131,20 @@ fun PseudoCode(currentLine: Int) {
 
     Column {
         pseudocode.forEachIndexed { index, line ->
-            Text(
-                text = line,
-                color = if (index + 1 == currentLine) Color.Yellow else Color.White,
-                fontSize = 16.sp
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        if (index + 1 == currentLine) Color(0x80FFFFFF) else Color.Transparent // Light white highlight
+                    )
+                    .padding(4.dp) // Padding around the text
+            ) {
+                Text(
+                    text = line,
+                    color = if (index + 1 == currentLine) Color.Yellow else Color.White,
+                    fontSize = 16.sp
+                )
+            }
         }
     }
 }
@@ -145,15 +152,15 @@ fun PseudoCode(currentLine: Int) {
 
 
 @Composable
-fun ArrowPointer(pointerLabel: String, index: Int, list: List<Int>) {
+fun ArrowPointer(pointerLabel: String, index: Int, list: List<Int>, color: Color) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(pointerLabel, color = Color.White, fontSize = 18.sp)
+        Text(pointerLabel, color = color, fontSize = 18.sp)
         Spacer(modifier = Modifier.height(4.dp))
-        Text("↓", color = Color.White, fontSize = 18.sp)
+        Text("↓", color = color, fontSize = 18.sp)
         Spacer(modifier = Modifier.height(4.dp))
-        Text(list[index].toString(), color = Color.White, fontSize = 18.sp)
+        Text(list[index].toString(), color = color, fontSize = 18.sp)
     }
     Spacer(modifier = Modifier.width(16.dp))
 }
